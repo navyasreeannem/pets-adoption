@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write a Review</title>
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #f5a623;
+      --background-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      --light-color: #ffffff;
+      --dark-color: #333333;
+      --success-color: #28a745;
+      --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --border-radius: 10px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-main);
+      line-height: 1.6;
+      color: var(--dark-color);
+      background: var(--background-gradient);
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background-color: var(--light-color);
+      box-shadow: var(--shadow);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar .logo i {
+      margin-right: 0.5rem;
+      color: var(--secondary-color);
+    }
+
+    .navbar ul {
+      display: flex;
+      list-style: none;
+    }
+
+    .navbar ul li {
+      margin-left: 1.5rem;
+    }
+
+    .navbar ul li a {
+      text-decoration: none;
+      color: var(--dark-color);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .navbar ul li a:hover {
+      color: var(--primary-color);
+    }
+
+    .hero-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2rem;
+      background-color: var(--light-color);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      margin: 2rem auto;
+      max-width: 1200px;
+    }
+
+    .hero-content h2 {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      color: var(--dark-color);
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: auto;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: var(--light-color);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    .form-container h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-family: var(--font-main);
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .primary-btn {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .primary-btn:hover {
+      background-color: #3a78c2;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .request-status {
+      margin-top: 2rem;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      text-align: center;
+      font-weight: 500;
+      display: none;
+    }
+
+    .success {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--success-color);
+      border: 1px solid var(--success-color);
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        flex-direction: column;
+      }
+
+      .hero-content {
+        padding-bottom: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fas fa-paw"></i> PetAdopt
+    </div>
+    <ul>
+      <li><a href="index.html" onclick="navigateToHome(); return false;">Home</a></li>
+    </ul>
+  </nav>
+  
+  <div class="hero-section">
+    <div class="hero-content">
+      <h2>Share Your Pet Experience</h2>
+      <p>Your experiences and insights are valuable to our community! By sharing your story, you help other pet owners learn and connect.</p>
+    </div>
+    <div class="hero-image">
+      <img src="https://images.unsplash.com/photo-1526363269865-60998e11d82d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Person with dog">
+    </div>
+  </div>
+ 
+  <main class="form-container">
+    <h1>Share Your Pet Experience</h1>
+    
+    <form id="review-form" class="request-form">
+      <div class="form-group">
+        <label for="userName">Your Name</label>
+        <input type="text" id="userName" name="userName" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="userEmail">Your Email</label>
+        <input type="email" id="userEmail" name="userEmail" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="petName">Pet Name</label>
+        <input type="text" id="petName" name="petName" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="petType">Pet Type</label>
+        <select id="petType" name="petType" required>
+          <option value="">Select Pet Type</option>
+          <option value="Dog">Dog</option>
+          <option value="Cat">Cat</option>
+          <option value="Bird">Bird</option>
+          <option value="Fish">Fish</option>
+          <option value="Rabbit">Rabbit</option>
+          <option value="Hamster">Hamster</option>
+          <option value="Guinea Pig">Guinea Pig</option>
+          <option value="Reptile">Reptile</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      
+      <div class="form-group full-width">
+        <label for="reviewTitle">Review Title</label>
+        <input type="text" id="reviewTitle" name="reviewTitle" required placeholder="Summarize your experience in a few words">
+      </div>
+      
+      <div class="form-group full-width">
+        <label for="content">Your Review</label>
+        <textarea id="content" name="content" rows="6" required placeholder="Share your experience with your pet..."></textarea>
+      </div>
+      
+      <div class="form-group form-submit-btn">
+        <button type="submit" class="btn primary-btn" id="submit-btn">Submit Review</button>
+      </div>
+    </form>
+    
+    <div id="thank-you-message" class="request-status success" style="display: none;">
+      <i class="fas fa-check-circle"></i> Thank you for your response!
+    </div>
+  </main>
+  
+<script>
+    function navigateToHome() {
+      window.location.href = 'index.html';
+    }
+    document.getElementById('review-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const data = {
+    userName: document.getElementById('userName').value,
+    userEmail: document.getElementById('userEmail').value,
+    petName: document.getElementById('petName').value,
+    petType: document.getElementById('petType').value,
+    reviewTitle: document.getElementById('reviewTitle').value,
+    content: document.getElementById('content').value,
+  };
+
+  try {
+    const response = await fetch('http://localhost:3000/api/reviews/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      alert('Review submitted successfully!');
+      document.getElementById('review-form').reset();
+    } else {
+      alert('Failed to submit review');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error occurred while submitting the review');
+  }
+});
+  </script>
+</body>
+</html>

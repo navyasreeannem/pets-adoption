@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adoption Request Details - Pet Adoption Admin</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    
+    .admin-header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 30px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1, h2 {
+      color: #333;
+    }
+    
+    .back-btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .detail-section {
+      margin-bottom: 30px;
+    }
+    
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .detail-item {
+      margin-bottom: 15px;
+    }
+    
+    .detail-label {
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    
+    .detail-value {
+      padding: 8px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      border: 1px solid #eee;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+    
+    .status.pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    
+    .status.approved {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .status.rejected {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    .pet-images {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .pet-image-container {
+      flex: 1;
+    }
+    
+    .pet-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    
+    .action-buttons button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    
+    .approve-btn {
+      background-color: #2ecc71;
+      color: white;
+    }
+    
+    .reject-btn {
+      background-color: #e74c3c;
+      color: white;
+    }
+    
+    .delete-btn {
+      background-color: #7f8c8d;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-header">
+    <h1>Pet Adoption Admin Dashboard</h1>
+  </div>
+  
+  <div class="container">
+    <button class="back-btn" onclick="goBack()">← Back to Adoption Requests</button>
+    
+    <h2>Adoption Request Details</h2>
+    
+    <div id="adoptionDetails">
+      <p>Loading adoption details...</p>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const adoptionDetailsContainer = document.getElementById('adoptionDetails');
+      
+      // Get adoption ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const adoptionId = urlParams.get('id');
+      
+      if (!adoptionId) {
+        adoptionDetailsContainer.innerHTML = '<p class="error">No adoption ID specified</p>';
+        return;
+      }
+      
+      // Fetch adoption details
+      fetchAdoptionDetails(adoptionId);
+      
+      // Function to go back to adoption list
+      window.goBack = function() {
+        window.location.href = 'manage-adoption.html';
+      };
+      
+      // Function to fetch adoption details
+      async function fetchAdoptionDetails(id) {
+        try {
+          const response = await fetch(`http://localhost:3000/api/adoptions/${id}`);
+          const result = await response.json();
+          
+          if (result.success) {
+            displayAdoptionDetails(result.data);
+          } else {
+            adoptionDetailsContainer.innerHTML = `<p class="error">Error loading adoption details: ${result.error}</p>`;
+          }
+        } catch (error) {
+          console.error('Error fetching adoption details:', error);
+          adoptionDetailsContainer.innerHTML = '<p class="error">Failed to load adoption details. Please try again.</p>';
+        }
+      }
+      
+      // Function to display adoption details
+      function displayAdoptionDetails(adoption) {
+        const html = `
+          <div class="detail-section">
+            <h3>Pet Information</h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <div class="detail-label">Pet Type</div>
+                <div class="detail-value">${adoption.petType}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Pet Name</div>
+                <div class="detail-value">${adoption.petName}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Breed</div>
+                <div class="detail-value">${adoption.petBreed}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Age</div>
+                <div class="detail-value">${adoption.petAge} months</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Price</div>
+                <div class="detail-value">₹${adoption.price}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Status</div>
+                <div class="detail-value">
+                  <span class="status ${adoption.status}">${adoption.status}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Owner Information</h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <div class="detail-label">Owner Name</div>
+                <div class="detail-value">${adoption.ownerName}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Email</div>
+                <div class="detail-value">
+                  <a href="mailto:${adoption.email}">${adoption.email}</a>
+                </div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Phone</div>
+                <div class="detail-value">
+                  <a href="tel:${adoption.phone}">${adoption.phone}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Reason for Rehoming</h3>
+            <div class="detail-value" style="white-space: pre-line;">${adoption.reason}</div>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Pet Images & Documents</h3>
+            <div class="pet-images">
+              <div class="pet-image-container">
+                <div class="detail-label">Pet Photo</div>
+                <img src="http://localhost:3000${adoption.petPhotoUrl}" alt="Pet Photo" class="pet-image">
+              </div>
+              <div class="pet-image-container">
+                <div class="detail-label">Pet Certificate</div>
+                <a href="http://localhost:3000${adoption.petCertUrl}" target="_blank">
+                  <img src="http://localhost:3000${adoption.petCertUrl}" alt="Pet Certificate" class="pet-image">
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <button class="approve-btn" onclick="updateStatus(${adoption.id}, 'approved')">Approve Request</button>
+            <button class="reject-btn" onclick="updateStatus(${adoption.id}, 'rejected')">Reject Request</button>
+            <button class="delete-btn" onclick="deleteAdoption(${adoption.id})">Delete Request</button>
+          </div>
+        `;
+        
+        adoptionDetailsContainer.innerHTML = html;
+      }
+      
+      // Function to update adoption status
+      window.updateStatus = async function(id, status) {
+        try {
+          const response = await fetch(`http://localhost:3000/api/adoptions/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status })
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            // Refresh the adoption details
+            fetchAdoptionDetails(id);
+          } else {
+            alert(`Error updating status: ${result.error}`);
+          }
+        } catch (error) {
+          console.error('Error updating adoption status:', error);
+          alert('Failed to update status. Please try again.');
+        }
+      };
+      
+      // Function to delete adoption request
+      window.deleteAdoption = async function(id) {
+        if (!confirm('Are you sure you want to delete this adoption request?')) {
+          return;
+        }
+        
+        try {
+          const response = await fetch(`http://localhost:3000/api/adoptions/${id}`, {
+            method: 'DELETE'
+          });
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            alert('Adoption request deleted successfully');
+            window.location.href = 'manage-adoption.html';
+          } else {
+            alert(`Error deleting adoption request: ${result.error}`);
+          }
+        } catch (error) {
+          console.error('Error deleting adoption:', error);
+          alert('Failed to delete adoption request. Please try again.');
+        }
+      };
+    });
+  </script>
+</body>
+</html>

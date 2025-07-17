@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resources</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: rgb(237, 205, 236);
+    }
+
+    h1 {
+      text-align: center;
+      margin: 20px 0;
+      color: purple;
+    }
+
+    #reviewList {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .review-item {
+      display: flex;
+      align-items: center;
+      background: rgb(20, 20, 20);
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(176, 166, 166, 0.1);
+      padding: 20px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .review-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px peachpuff;
+    }
+
+    .review-item:nth-child(odd) {
+      flex-direction: row;
+    }
+
+    .review-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+
+    .review-item h3 {
+      margin: 0 0 10px;
+      color: rgb(187, 88, 88);
+      font-size: 20px;
+    }
+
+    .review-item p {
+      margin: 5px 0;
+      color: white;
+      font-size: 14px;
+    }
+
+    .review-content {
+      flex: 1;
+      padding: 10px;
+    }
+
+    .review-avatar {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      background: #4a90e2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+
+    .review-item:nth-child(even) .review-avatar {
+      margin-right: 0;
+      margin-left: 20px;
+    }
+
+    button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #357ab8;
+    }
+  </style>
+</head>
+<body>
+  <h1>Reviews of Pet Parents</h1>
+  <div id="reviewList"></div>
+  <button onclick="window.location.href='write-review.html'">Write a Review</button>
+
+  <script>
+    // Generate a random color
+    function getRandomColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    // Fetch and Display Reviews
+    async function fetchReviews() {
+      try {
+        const response = await fetch('http://localhost:3000/api/reviews/');
+        const reviews = await response.json();
+
+        const reviewList = document.getElementById('reviewList');
+        reviewList.innerHTML = ''; // Clear existing reviews
+
+        reviews.forEach((review, index) => {
+          const reviewDiv = document.createElement('div');
+          reviewDiv.className = 'review-item';
+          reviewDiv.innerHTML = `
+            <div class="review-avatar" style="background-color: ${getRandomColor()};"></div>
+            <div class="review-content">
+              <h3>${review.reviewTitle}</h3>
+              <p><strong>By:</strong> ${review.userName}</p>
+              <p><strong>Pet:</strong> ${review.petName} (${review.petType})</p>
+              <p>${review.content}</p>
+            </div>
+          `;
+          reviewList.appendChild(reviewDiv);
+        });
+      } catch (err) {
+        console.error('Failed to fetch reviews:', err);
+      }
+    }
+
+    // Initial Fetch
+    fetchReviews();
+  </script>
+</body>
+</html>

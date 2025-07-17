@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Adoption Center</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      </head>
+      
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .carousel-item img {
+            height: 700px;
+            object-fit: cover;
+        }
+        .navbar {
+            background: rgba(40, 40, 40, 0.9); /* Dark semi-transparent background */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            padding: 15px 0; /* Add padding for better spacing */
+        
+            
+        
+        }
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 24px;
+            color: #ffffff !important; /* White text */
+        }
+        .navbar-nav .nav-link {
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff !important; /* White text */
+            margin: 0 15px; /* Spacing between nav items */
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ffcc00 !important; /* Yellow on hover */
+        }
+        .navbar-nav .nav-link::after {
+            
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #ffcc00; /* Yellow underline */
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+            
+        }
+        .navbar-nav .nav-link:hover::after {
+            width: 100%; /* Animated underline on hover */
+        }
+        .navbar-nav .nav-link.active {
+            color: #ffcc00 !important; /* Yellow for active link */
+        }
+        .navbar-toggler {
+            border: none;
+            outline: none;
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+        }
+        
+        
+        .carousel-gap {
+            margin-top: 50px; /* Gap between navbar and carousel */
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Pet Adoption Center</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="adoption.html">Adoption</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="volunteer.html">Volunteer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="veterinary.html">Veterinary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="petfood.html">Pet Food</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="managePetsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Manage Pets
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="managePetsDropdown">
+                            <li><a class="dropdown-item" href="../admin/admin-login.html">Admin Login</a></li>
+                                
+                        </ul>
+                    </li>
+                    
+                    
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="resources.html">Resources</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Carousel with Gap -->
+    <div id="petCarousel" class="carousel slide carousel-gap" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#petCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#petCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#petCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#petCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#petCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+        </div>
+        <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active">
+                <a href="adoption.html">
+                    <img src="https://images.unsplash.com/photo-1522276498395-f4f68f7f8454?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Dog">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Adopt a Pet</h5>
+                        <p>Find your new best friend today!</p>
+                    </div>
+                </a>
+            </div>
+            <!-- Slide 2 -->
+            <div class="carousel-item">
+                <a href="volunteer.html">
+                <img src="https://plus.unsplash.com/premium_photo-1679521026467-eaf100b5eae0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Cat">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Volunteer a Pet</h5>
+                    <p>Give the pet a loving home.</p>
+                </div>
+                </a>
+            </div>
+            <!-- Slide 3 -->
+            <div class="carousel-item">
+                <a href="veterinary.html">
+                <img src="https://plus.unsplash.com/premium_photo-1661963683773-665c3f763f46?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Rabbit">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Veterinary Doctor Consultation Made Easy!</h5>
+                    <p>Your pet, our veterinary care!</p>
+                </div>
+                </a>
+                <a href="petfood.html">
+            </div>
+            <!-- Slide 4 -->
+            <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1608408891486-f5cade977d19?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Bird">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Nutritious Pet Food for Health!</h5>
+                    <p>Happy pets need quality food!</p>
+                </div>
+            </a>
+            </div>
+            <!-- Slide 5 -->
+            <div class="carousel-item">
+                <a href="write-review.html">
+                <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=2060&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="Hamster">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Essential Resources for Pet Care!</h5>
+                    <p>Right resources for happy pets!</p>
+                </div>
+                </a>
+            </div>
+        </div>
+        <!-- Left and Right Arrows -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#petCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#petCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js">
+        
+    document.addEventListener("DOMContentLoaded", function () {
+        const userRole = sessionStorage.getItem("userRole"); // "user" or "admin"
+
+        if (userRole === "admin") {
+            document.getElementById("adminApprovalsLink").classList.remove("d-none");
+            document.getElementById("vetManagementLink").classList.remove("d-none");
+        }
+    });
+</script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-section about">
+            <h2>About Us</h2>
+            <p>We connect loving homes with pets in need. Adopt, foster, or volunteer today and make a difference!</p>
+          </div>
+      
+          <div class="footer-section links">
+            <h2>Quick Links</h2>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="adoption.html">Adopt a Pet</a></li>
+              <li><a href="volunteer.html">Volunteer</a></li>
+              <li><a href="write-review.html">Contact Us</a></li>
+            </ul>
+          </div>
+      
+          <div class="footer-section contact">
+            <h2>Contact Us</h2>
+            <p>Email: support@petadopt.com</p>
+            <p>Phone: +1 234 567 890</p>
+            <p>Location: 123 Pet Street, NY</p>
+          </div>
+      
+          <div class="footer-section social">
+            <h2>Follow Us</h2></a></li>
+              
+            <ul>
+                <li><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+                <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+            </ul>
+                
+            
+          </div>
+        </div>
+      
+        <div class="footer-bottom">
+          <p>© 2025 PetAdopt. All rights reserved.</p>
+        </div>
+      </footer>
+      
+      <style>
+        .footer {
+          background: #333;
+          color: white;
+          padding: 20px 0;
+          text-align: center;
+        }
+      
+        .footer-container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+          max-width: 1200px;
+          margin: auto;
+        }
+      
+        .footer-section {
+          flex: 1;
+          min-width: 250px;
+          margin: 10px;
+        }
+      
+        .footer-section h2 {
+          font-size: 18px;
+          margin-bottom: 10px;
+          border-bottom: 2px solid #fff;
+          display: inline-block;
+          padding-bottom: 5px;
+        }
+      
+        .footer-section ul {
+          list-style: none;
+          padding: 0;
+        }
+      
+        .footer-section ul li {
+          margin: 5px 0;
+        }
+      
+        .footer-section a {
+          color: #ffcc00;
+          text-decoration: none;
+        }
+      
+        .footer-section a:hover {
+          text-decoration: underline;
+        }
+      
+        .footer-bottom {
+            
+          margin-top: 40px;
+          border-top: 1px solid #555;
+          padding-top: 10px;
+        }
+      </style>
+      
+    
+</body>
+</html>

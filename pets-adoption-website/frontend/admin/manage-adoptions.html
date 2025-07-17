@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Adoption Requests - Pet Adoption Admin</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    
+    .admin-header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    
+    .adoptions-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .adoptions-table th, .adoptions-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    .adoptions-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    
+    .adoptions-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    .adoptions-table tr:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .status {
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+    
+    .status.pending {
+      color: #f39c12;
+    }
+    
+    .status.approved {
+      color: #27ae60;
+    }
+    
+    .status.rejected {
+      color: #e74c3c;
+    }
+    
+    button {
+      padding: 6px 12px;
+      margin: 2px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .view-btn {
+      background-color: #3498db;
+      color: white;
+    }
+    
+    .approve-btn {
+      background-color: #2ecc71;
+      color: white;
+    }
+    
+    .reject-btn {
+      background-color: #e74c3c;
+      color: white;
+    }
+    
+    .delete-btn {
+      background-color: #7f8c8d;
+      color: white;
+    }
+    
+    .error {
+      color: #e74c3c;
+      text-align: center;
+      font-weight: bold;
+    }
+    
+    .nav-buttons {
+      margin-bottom: 20px;
+    }
+    
+    .nav-buttons button {
+      padding: 10px 15px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-header">
+    <h1>Pet Adoption Admin Dashboard</h1>
+  </div>
+  
+  <div class="container">
+    <div class="nav-buttons">
+      <button onclick="window.location.href='dashboard.html'">Dashboard</button>
+
+    </div>
+    
+    <h2>Manage Adoption Requests</h2>
+    
+    <div id="adoptionsContainer">
+      <p>Loading adoption requests...</p>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  const adoptionsContainer = document.getElementById('adoptionsContainer');
+  
+  // Fetch all adoption requests
+  async function fetchAdoptionRequests() {
+    try {
+      const response = await fetch('http://localhost:3000/api/adoptions');
+      const result = await response.json();
+      
+      if (result.success) {
+        displayAdoptionRequests(result.data);
+      } else {
+        adoptionsContainer.innerHTML = `<p class="error">Error loading adoption requests: ${result.error}</p>`;
+      }
+    } catch (error) {
+      console.error('Error fetching adoption requests:', error);
+      adoptionsContainer.innerHTML = '<p class="error">Failed to load adoption requests. Please try again.</p>';
+    }
+  }
+  
+  // Display adoption requests in a table
+  function displayAdoptionRequests(adoptions) {
+    if (adoptions.length === 0) {
+      adoptionsContainer.innerHTML = '<p>No adoption requests found.</p>';
+      return;
+    }
+    
+    const html = `
+      <table class="adoptions-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Pet Name</th>
+            <th>Type</th>
+            <th>Breed</th>
+            <th>Owner</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${adoptions.map(adoption => `
+            <tr>
+              <td>${adoption.id}</td>
+              <td>${adoption.petName}</td>
+              <td>${adoption.petType}</td>
+              <td>${adoption.petBreed}</td>
+              <td>${adoption.ownerName}</td>
+              <td>₹${adoption.price.toLocaleString('en-IN')}</td>
+              <td><span class="status ${adoption.status}">${adoption.status}</span></td>
+              <td>${new Date(adoption.createdAt).toLocaleDateString()}</td>
+              <td>
+                <button class="view-btn" onclick="viewAdoption(${adoption.id})">View</button>
+                ${adoption.status === 'pending' ? `
+                  <button class="approve-btn" onclick="updateStatus(${adoption.id}, 'approved')">Approve</button>
+                  <button class="reject-btn" onclick="updateStatus(${adoption.id}, 'rejected')">Reject</button>
+                ` : ''}
+                <button class="delete-btn" onclick="deleteAdoption(${adoption.id})">Delete</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+    
+    adoptionsContainer.innerHTML = html;
+  }
+  
+  // Function to view adoption details
+  window.viewAdoption = function(id) {
+    window.location.href = `adoption-details.html?id=${id}`;
+  };
+  
+  // Function to update adoption status
+  window.updateStatus = async function(id, status) {
+    try {
+      const response = await fetch(`http://localhost:3000/api/adoptions/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Refresh the adoption requests
+        fetchAdoptionRequests();
+      } else {
+        alert(`Error updating status: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error updating adoption status:', error);
+      alert('Failed to update status. Please try again.');
+    }
+  };
+  
+  // Function to delete adoption request
+  window.deleteAdoption = async function(id) {
+    if (!confirm('Are you sure you want to delete this adoption request?')) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`http://localhost:3000/api/adoptions/${id}`, {
+        method: 'DELETE'
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Refresh the adoption requests
+        fetchAdoptionRequests();
+      } else {
+        alert(`Error deleting adoption request: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error deleting adoption:', error);
+      alert('Failed to delete adoption request. Please try again.');
+    }
+  };
+  
+  // Initial fetch of adoption requests
+  fetchAdoptionRequests();
+});
+
+  </script>
+</body>
+</html>

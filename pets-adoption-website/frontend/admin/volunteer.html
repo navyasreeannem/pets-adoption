@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Volunteering - Pet Adoption Website</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7fb;
+      color: #333;
+    }
+    
+    .hero {
+      background: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3') center/cover no-repeat;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      position: relative;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+      padding: 0 20px;
+    }
+    
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    
+    .section-title h2 {
+      font-size: 36px;
+      color: #333;
+      margin-bottom: 15px;
+    }
+    
+    .section-title p {
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .card:hover .card-img img {
+      transform: scale(1.05);
+    }
+    
+    .card-content {
+      padding: 25px;
+    }
+    
+    .card-title {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    .card-text {
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .cta-section {
+      text-align: center;
+      background-color: #f0f4f8;
+      padding: 60px 20px;
+      border-radius: 10px;
+    }
+    
+    .cta-title {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    
+    .cta-text {
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #388E3C;
+    }
+    
+    .btn-secondary {
+      background-color: #2196F3;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #1976D2;
+    }
+    
+    .faq-section {
+      margin-top: 80px;
+    }
+    
+    .faq-item {
+      margin-bottom: 20px;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .faq-question {
+      padding: 20px;
+      background-color: #f8f9fa;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .faq-question::after {
+      content: '+';
+      font-size: 20px;
+    }
+    
+    .faq-question.active::after {
+      content: '-';
+    }
+    
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out, padding 0.3s ease;
+    }
+    
+    .faq-answer.show {
+      padding: 20px;
+      max-height: 500px;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 36px;
+      }
+      
+      .section-title h2 {
+        font-size: 28px;
+      }
+      
+      .cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .cta-title {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Pet Volunteering Program</h1>
+      <p>Help pets find temporary homes while their owners are away. Be a part of our community that cares for animals in need.</p>
+      <a href="request-volunteer.html" class="btn">Request a Volunteer</a>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="section-title">
+      <h2>How Our Volunteering Program Works</h2>
+      <p>Our pet volunteering program connects pet owners who need temporary care for their pets with loving volunteers who can provide a safe home environment.</p>
+    </div>
+    
+    <div class="cards">
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1560743641-3914f2c45636?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3" alt="Submit Request">
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">1. Submit Your Request</h3>
+          <p class="card-text">Fill out our volunteer request form with details about your pet, the dates you need care, and any special instructions.</p>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?q=80&w=1950&auto=format&fit=crop&ixlib=rb-4.0.3" alt="Get Matched">
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">2. Get Matched with a Volunteer</h3>
+          <p class="card-text">Our team reviews your request and matches your pet with a suitable volunteer based on experience, location, and availability.</p>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-img">
+          <img src="https://images.unsplash.com/photo-1601758125946-6ec2ef64daf8?q=80&w=1936&auto=format&fit=crop&ixlib=rb-4.0.3" alt="Meet and Greet">
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">3. Meet and Greet</h3>
+          <p class="card-text">Arrange a meeting with the volunteer to ensure they're a good fit for your pet and discuss care details.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="cta-section">
+      <h2 class="cta-title">Need Someone to Care for Your Pet?</h2>
+      <p class="cta-text">Going on vacation? Business trip? Or just need someone to look after your pet for a few days? Our volunteer network is here to help.</p>
+      <a href="request-volunteer.html" class="btn">Request a Volunteer Now</a>
+    </div>
+    
+    <div class="faq-section">
+      <div class="section-title">
+        <h2>Frequently Asked Questions</h2>
+        <p>Find answers to common questions about our pet volunteering program.</p>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">Is there a fee for using the volunteer service?</div>
+        <div class="faq-answer">
+          <p>Our volunteer service is completely free. We connect pet owners with volunteers who are happy to help care for pets out of their love for animals. However, pet owners are responsible for providing food, medication, and any other supplies needed for their pet's care.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">How are volunteers screened?</div>
+        <div class="faq-answer">
+          <p>All volunteers go through a thorough screening process that includes background checks, home visits, and reference checks. We also require volunteers to have prior experience with pets and provide training on pet care best practices.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">How far in advance should I request a volunteer?</div>
+        <div class="faq-answer">
+          <p>We recommend submitting your request at least 2 weeks in advance to ensure we have enough time to find a suitable match for your pet. For last-minute requests, we'll do our best to accommodate but cannot guarantee a match.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">What happens in case of a pet emergency?</div>
+        <div class="faq-answer">
+          <p>All volunteers are trained to handle basic pet emergencies and have access to your emergency contact information. We also recommend providing your vet's contact information and any specific instructions for emergency situations.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">Can I request a specific volunteer?</div>
+        <div class="faq-answer">
+          <p>Yes, if you've worked with a volunteer before and would like to request them again, you can mention this in your request form. We'll check their availability and try to accommodate your preference.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Toggle FAQ answers
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', () => {
+        // Toggle active class on the question
+        question.classList.toggle('active');
+        
+        // Toggle show class on the answer
+        const answer = question.nextElementSibling;
+        answer.classList.toggle('show');
+      });
+    });
+  </script>
+</body>
+</html>

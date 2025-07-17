@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Volunteer Requests - Pet Adoption Website</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: #333;
+    }
+    
+    .hero {
+      background: rgb(159, 134, 192);
+      height: 130px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: rgb(35, 25, 66);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      padding: 0 20px;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    
+    .hero p {
+      font-size: 20px;
+      max-width: 800px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    
+    .request-card {
+      background-color: rgb(236, 235, 235);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    
+    .request-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: rgb(94, 84, 142);
+      color: white;
+    }
+    
+    .request-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0;
+    }
+    
+    .request-status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+    
+    .pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    
+    .approved {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .rejected {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    .request-content {
+      display: flex;
+      padding: 20px;
+    }
+    
+    .pet-image {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 20px;
+    }
+    
+    .request-details {
+      flex: 1;
+    }
+    
+    .detail-group {
+      margin-bottom: 15px;
+    }
+    
+    .detail-label {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 3px;
+    }
+    
+    .detail-value {
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .date-range {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .request-actions {
+      padding: 15px 20px;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    
+    .action-btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    
+    .edit-btn {
+      background-color: #17a2b8;
+      color: white;
+    }
+    
+    .cancel-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+    
+    .no-requests {
+      text-align: center;
+      padding: 50px;
+      font-size: 18px;
+      color: #666;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 50px;
+    }
+    
+    .new-request-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background-color: rgb(159, 134, 192);
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      margin-top: 30px;
+      transition: background-color 0.3s;
+    }
+    
+    .new-request-btn:hover {
+      background-color: rgb(141, 99, 196);
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 36px;
+      }
+      
+      .hero p {
+        font-size: 16px;
+      }
+      
+      .request-content {
+        flex-direction: column;
+      }
+      
+      .pet-image {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+      
+      .date-range {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>My Volunteer Requests</h1>
+    <p>Track the status of your volunteer requests</p>
+  </div>
+  
+  <div class="container">
+    <div id="requestsContainer">
+      <div class="loading">Loading your volunteer requests...</div>
+    </div>
+    
+    <a href="request-volunteer.html" class="new-request-btn">Submit a New Volunteer Request</a>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const requestsContainer = document.getElementById('requestsContainer');
+      
+      // Get user email from localStorage (assuming user is logged in)
+      const userEmail = localStorage.getItem('userEmail');
+      
+      if (!userEmail) {
+        requestsContainer.innerHTML = `
+          <div class="no-requests">
+            <p>You need to be logged in to view your volunteer requests.</p>
+            <p><a href="login.html">Click here to log in</a></p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Fetch user's volunteer requests
+      async function fetchUserRequests() {
+        try {
+          // Show loading message
+          requestsContainer.innerHTML = '<div class="loading">Loading your volunteer requests...</div>';
+          
+          const response = await fetch(`http://localhost:3000/api/volunteer-requests/user/${encodeURIComponent(userEmail)}`);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            displayUserRequests(result.data);
+          } else {
+            requestsContainer.innerHTML = `<div class="no-requests">Error loading requests: ${result.message}</div>`;
+          }
+        } catch (error) {
+          console.error('Error fetching user requests:', error);
+          requestsContainer.innerHTML = '<div class="no-requests">Failed to load your requests. Please try again later.</div>';
+        }
+      }
+      
+      // Display user's volunteer requests
+      function displayUserRequests(requests) {
+        if (requests.length === 0) {
+          requestsContainer.innerHTML = `
+            <div class="no-requests">
+              <p>You haven't submitted any volunteer requests yet.</p>
+              <p>Use the button below to submit a new request.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        let html = '';
+        
+        requests.forEach(request => {
+          // Format dates
+          const startDate = new Date(request.startDate).toLocaleDateString();
+          const endDate = new Date(request.endDate).toLocaleDateString();
+          const submittedDate = new Date(request.createdAt).toLocaleDateString();
+          
+          // Get photo URL
+          const photoUrl = request.petPhotoUrl ?
+            (request.petPhotoUrl.startsWith('/') ? `http://localhost:3000${request.petPhotoUrl}` : `http://localhost:3000/${request.petPhotoUrl}`) :
+            'placeholder.jpg';
+          
+          html += `
+            <div class="request-card">
+              <div class="request-header">
+                <h3 class="request-title">Request #${request.id}</h3>
+                <span class="request-status ${request.status}">${request.status}</span>
+              </div>
+              
+              <div class="request-content">
+                <img src="${photoUrl}" alt="${request.petName}" class="pet-image" onerror="this.src='placeholder.jpg'">
+                
+                <div class="request-details">
+                  <div class="detail-group">
+                    <div class="detail-label">Pet Name</div>
+                    <div class="detail-value">${request.petName}</div>
+                  </div>
+                  
+                  <div class="detail-group">
+                    <div class="detail-label">Pet Type</div>
+                    <div class="detail-value">${request.petType} - ${request.petBreed}</div>
+                  </div>
+                  
+                  <div class="detail-group">
+                    <div class="detail-label">Volunteering Period</div>
+                    <div class="date-range">
+                      <div>
+                        <div class="detail-label">From</div>
+                        <div class="detail-value">${startDate}</div>
+                      </div>
+                      <div>
+                        <div class="detail-label">To</div>
+                        <div class="detail-value">${endDate}</div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="detail-group">
+                    <div class="detail-label">Submitted On</div>
+                    <div class="detail-value">${submittedDate}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="request-actions">
+                ${request.status === 'pending' ? `
+                  <button class="action-btn edit-btn" onclick="editRequest(${request.id})">Edit Request</button>
+                  <button class="action-btn cancel-btn" onclick="cancelRequest(${request.id})">Cancel Request</button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        });
+        
+        requestsContainer.innerHTML = html;
+      }
+      
+      // Edit volunteer request
+      window.editRequest = function(id) {
+        // Redirect to edit page with request ID
+        window.location.href = `edit-volunteer-request.html?id=${id}`;
+      };
+      
+      // Cancel volunteer request
+      window.cancelRequest = async function(id) {
+        if (!confirm('Are you sure you want to cancel this volunteer request?')) {
+          return;
+        }
+        
+        try {
+            const response = await fetch(`http://localhost:3000/api/volunteer-requests/${id}`, {
+            method: 'DELETE'
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          
+          const result = await response.json();
+          
+          if (result.success) {
+            alert('Volunteer request cancelled successfully!');
+            // Refresh the list
+            fetchUserRequests();
+          } else {
+            alert(`Error cancelling request: ${result.message}`);
+          }
+        } catch (error) {
+          console.error('Error cancelling request:', error);
+          alert('Failed to cancel request. Please try again later.');
+        }
+      };
+      
+      // Initial fetch of user requests
+      fetchUserRequests();
+    });
+  </script>
+</body>
+</html>
+
+          

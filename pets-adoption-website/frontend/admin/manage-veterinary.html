@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Veterinary Doctors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #3b6f9d; /* Light calming blue */
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50; /* Darker blue-gray */
+    }
+
+    form {
+      background-color: #ffffff; /* White background for contrast */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: black; /* Calming green */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049; /* Slightly darker green */
+    }
+
+    @media (max-width: 600px) {
+      form {
+        padding: 15px;
+      }
+
+      input, button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <form id="update-doctor-form">
+    <img src="https://plus.unsplash.com/premium_photo-1677165479692-180fac4c0832?q=80&w=1755&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Veterinary Icon" />
+    <h1>Manage Veterinary Doctors</h1>
+    <input type="number" id="doctor-id" placeholder="Doctor ID" required />
+    <input type="text" id="doctor-name" placeholder="Doctor Name" required />
+    <input type="text" id="doctor-specialization" placeholder="Specialization" required />
+    <input type="text" id="doctor-phone" placeholder="Phone Number" required />
+    <input type="text" id="doctor-location" placeholder="Location" required />
+    <input type="text" id="doctor-photo" placeholder="Photo URL" required />
+    <button type="submit">Update Doctor</button>
+  </form>
+
+  <script>
+    document.getElementById('update-doctor-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const id = document.getElementById('doctor-id').value;
+      const name = document.getElementById('doctor-name').value;
+      const specialization = document.getElementById('doctor-specialization').value;
+      const phone = document.getElementById('doctor-phone').value;
+      const location = document.getElementById('doctor-location').value;
+      const photo_url = document.getElementById('doctor-photo').value;
+
+      try {
+        const response = await fetch(`http://localhost:3000/api/doctors/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, specialization, phone, location, photo_url }),
+        });
+
+        if (response.ok) {
+          alert('Doctor updated successfully!');
+        } else {
+          alert('Failed to update doctor.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while updating the doctor.');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Pet Food</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: rgb(77, 77, 107); /* Light gray background */
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50; /* Darker blue-gray */
+    }
+
+    form {
+      background-color: #ffffff; /* White background for contrast */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    input, textarea {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: black; /* Calming blue */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2c3e50; /* Slightly darker blue */
+    }
+
+    @media (max-width: 600px) {
+      form {
+        padding: 15px;
+      }
+
+      input, textarea, button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <form id="petFoodForm">
+    <img src="https://plus.unsplash.com/premium_photo-1683134390918-7fc5b8f54347?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Pet Food Icon" />
+    <h1>Manage Pet Food</h1>
+    <input type="text" id="photo" name="photo" placeholder="Image URL" required />
+    <input type="text" id="recipeName" name="recipeName" placeholder="Recipe Name" required />
+    <input type="text" id="petType" name="petType" placeholder="Pet Type" required />
+    <input type="text" id="ageRange" name="ageRange" placeholder="Age Range" required />
+    <input type="number" id="price" name="price" placeholder="Price" required />
+    <textarea id="description" name="description" placeholder="Description" required></textarea>
+    <button type="submit">Add Food</button>
+  </form>
+
+  <script>
+    // Add Pet Food
+    document.getElementById('petFoodForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch('http://localhost:3000/api/petfood/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          alert('Food added successfully!');
+        } else {
+          const error = await response.json();
+          alert(`Failed to add food: ${error.message}`);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error occurred');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pet Volunteering Request</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: rgb(201, 201, 226);
+    }
+    .hero {
+      background: url('https://plus.unsplash.com/premium_photo-1669725687137-75f7a1377720?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      font-size: 36px;
+      font-weight: 700;
+    }
+    .container {
+      max-width: 800px;
+      background-color: white;
+      margin: -80px auto 30px;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    .form-title {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      font-weight: 500;
+      margin-top: 15px;
+      display: block;
+      color: #555;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      font-size: 14px;
+    }
+    input[type="file"] {
+      background-color: transparent;
+    }
+    .btn-container {
+      text-align: center;
+      margin-top: 25px;
+    }
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    .submit-btn {
+      background-color: #28a745;
+      color: white;
+    }
+    .home-btn {
+      background-color: grey;
+      color: white;
+    }
+    .success-msg {
+      text-align: center;
+      color: green;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .error-msg {
+      text-align: center;
+      color: #dc3545;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .loading {
+      text-align: center;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      .hero {
+        font-size: 24px;
+        height: 200px;
+      }
+      .container {
+        margin: -60px 15px 30px;
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="hero">
+    Pet Volunteering Request
+  </div>
+
+  <div class="container">
+    <div class="btn-container">
+      <button class="home-btn" onclick="goHome()">🏠 Home</button>
+    </div>
+
+    <form id="volunteerForm">
+      <div class="form-title">Going on a Trip? Let Someone Care for Your Pet!</div>
+
+      <label for="petName">Pet Name</label>
+      <input type="text" name="petName" required>
+
+      <label for="petType">Pet Type</label>
+      <input type="text" name="petType" required>
+
+      <label for="petBreed">Pet Breed</label>
+      <input type="text" name="petBreed" required>
+
+      <label for="petAge">Pet Age (in months)</label>
+      <input type="number" name="petAge" required>
+
+      <label for="startDate">Volunteering Start Date</label>
+      <input type="date" name="startDate" required>
+
+      <label for="endDate">Volunteering End Date</label>
+      <input type="date" name="endDate" required>
+
+      <label for="ownerName">Your Name</label>
+      <input type="text" name="ownerName" required>
+
+      <label for="email">Email</label>
+      <input type="email" name="email" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" name="phone" required>
+
+      <label for="instructions">Special Care Instructions</label>
+      <textarea name="instructions" rows="3" placeholder="Feeding, walks, allergies, etc."></textarea>
+
+      <label for="petPhoto">Pet Photo</label>
+      <input type="file" name="petPhoto" accept="image/*" required>
+
+      <label for="petCert">Pet Certificates (PDF/Image)</label>
+      <input type="file" name="petCert" accept=".pdf,image/*" required>
+
+      <div class="btn-container">
+        <button type="submit" class="submit-btn">Submit Request</button>
+      </div>
+    </form>
+
+    <div class="loading" id="loadingMsg" style="display: none;">
+      <img src="https://i.gifer.com/ZKZg.gif" alt="Loading" style="width: 50px;">
+      <p>Submitting your request...</p>
+    </div>
+
+    <div class="success-msg" id="successMsg"></div>
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+
+  <script>
+    
+  function goHome() {
+    window.location.href = "../user/index.html"; // Adjust path as needed
+  }
+  // Add this JavaScript to your request-volunteer.html file
+document.addEventListener('DOMContentLoaded', function() {
+  const volunteerForm = document.getElementById('volunteerForm');
+  const loadingMsg = document.getElementById('loadingMsg');
+  const successMsg = document.getElementById('successMsg');
+  const errorMsg = document.getElementById('errorMsg');
+
+  volunteerForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    console.log('Form submitted'); // Debug log
+    
+    // Clear previous messages
+    successMsg.textContent = '';
+    errorMsg.textContent = '';
+    
+    // Show loading message
+    loadingMsg.style.display = 'block';
+    
+    // Disable submit button
+    const submitBtn = document.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    
+    // Create FormData object
+    const formData = new FormData(volunteerForm);
+    
+    try {
+      console.log('Sending request to server...'); // Debug log
+      
+      // Log form data for debugging
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
+      
+      const response = await fetch('http://localhost:3000/api/volunteer-requests/add', {
+        method: 'POST',
+        body: formData
+      });
+      
+      console.log('Response received:', response.status); // Debug log
+      
+      const result = await response.json();
+      console.log('Response data:', result); // Debug log
+      
+      if (result.success) {
+        // Success
+        successMsg.textContent = 'Your volunteer request has been submitted successfully! We will review it shortly.';
+        volunteerForm.reset();
+      } else {
+        // API error
+        errorMsg.textContent = 'Error: ' + result.message;
+      }
+    } catch (error) {
+      // Network or other error
+      console.error('Error submitting form:', error);
+      errorMsg.textContent = 'Failed to submit your request. Please try again later.';
+    } finally {
+      // Hide loading message
+      loadingMsg.style.display = 'none';
+      
+      // Re-enable submit button
+      submitBtn.disabled = false;
+    }
+  });
+});
+
+  
+</script>
+
+</body>
+</html>

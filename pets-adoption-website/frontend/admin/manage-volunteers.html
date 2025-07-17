@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Volunteer Requests - Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7fb;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+    
+    .back-btn {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .volunteers-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .volunteers-table th, 
+    .volunteers-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .volunteers-table th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #495057;
+    }
+    
+    .volunteers-table tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+    
+    .pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    
+    .approved {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .rejected {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    .view-btn, 
+    .approve-btn, 
+    .reject-btn, 
+    .delete-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-right: 5px;
+      font-weight: 500;
+    }
+    
+    .view-btn {
+      background-color: #17a2b8;
+      color: white;
+    }
+    
+    .approve-btn {
+      background-color: #28a745;
+      color: white;
+    }
+    
+    .reject-btn {
+      background-color: #dc3545;
+      color: white
+    }
+    
+    .delete-btn {
+      background-color: #6c757d;
+      color: white;
+    }
+    
+    .view-btn:hover, 
+    .approve-btn:hover, 
+    .reject-btn:hover, 
+    .delete-btn:hover {
+      opacity: 0.9;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      overflow: auto;
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 800px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #aaa;
+    }
+    
+    .close-btn:hover {
+      color: #333;
+    }
+    
+    .volunteer-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    
+    .pet-info, 
+    .owner-info {
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+    
+    .detail-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #333;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    
+    .detail-item {
+      margin-bottom: 10px;
+    }
+    
+    .detail-label {
+      font-weight: 500;
+      color: #666;
+      margin-bottom: 5px;
+      display: block;
+    }
+    
+    .detail-value {
+      color: #333;
+    }
+    
+    .pet-image {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .cert-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #007bff;
+      text-decoration: none;
+    }
+    
+    .cert-link:hover {
+      text-decoration: underline;
+    }
+    
+    .instructions {
+      grid-column: span 2;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+      gap: 10px;
+    }
+    
+    .no-volunteers {
+      text-align: center;
+      padding: 50px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      color: #6c757d;
+      font-size: 18px;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 50px;
+    }
+    
+    @media (max-width: 768px) {
+      .volunteer-details {
+        grid-template-columns: 1fr;
+      }
+      
+      .instructions {
+        grid-column: span 1;
+      }
+      
+      .volunteers-table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Manage Volunteer Requests</h1>
+      <a href="dashboard.html" class="back-btn">Back to Dashboard</a>
+    </div>
+    
+    <div id="volunteersContainer">
+      <div class="loading">Loading volunteer requests...</div>
+    </div>
+  </div>
+  
+  <!-- Volunteer Details Modal -->
+  <div id="volunteerModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <div id="volunteerDetails"></div>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+  fetchVolunteerRequests();
+});
+
+// Fetch all volunteer requests
+async function fetchVolunteerRequests() {
+  const volunteersContainer = document.getElementById('volunteersContainer');
+  
+  try {
+    const response = await fetch('http://localhost:3000/api/volunteer-requests');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      displayVolunteerRequests(result.data);
+    } else {
+      volunteersContainer.innerHTML = `<div class="no-volunteers">Error loading volunteer requests: ${result.message}</div>`;
+    }
+  } catch (error) {
+    console.error('Error fetching volunteer requests:', error);
+    volunteersContainer.innerHTML = '<div class="no-volunteers">Failed to load volunteer requests. Please try again later.</div>';
+  }
+}
+
+// Display volunteer requests in a table
+function displayVolunteerRequests(volunteers) {
+  const volunteersContainer = document.getElementById('volunteersContainer');
+  
+  if (volunteers.length === 0) {
+    volunteersContainer.innerHTML = '<div class="no-volunteers">No volunteer requests found.</div>';
+    return;
+  }
+  
+  let html = `
+    <table class="volunteers-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Pet Name</th>
+          <th>Pet Type</th>
+          <th>Owner</th>
+          <th>Date Range</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+  
+  volunteers.forEach(volunteer => {
+    const startDate = new Date(volunteer.startDate).toLocaleDateString();
+    const endDate = new Date(volunteer.endDate).toLocaleDateString();
+    
+    html += `
+      <tr>
+        <td>${volunteer.id}</td>
+        <td>${volunteer.petName}</td>
+        <td>${volunteer.petType} (${volunteer.petBreed})</td>
+        <td>${volunteer.ownerName}</td>
+        <td>${startDate} to ${endDate}</td>
+        <td><span class="status ${volunteer.status}">${volunteer.status}</span></td>
+        <td>
+          <button class="view-btn" onclick="viewVolunteerDetails(${volunteer.id})">View</button>
+          ${volunteer.status === 'pending' ? `
+            <button class="approve-btn" onclick="updateStatus(${volunteer.id}, 'approved')">Approve</button>
+            <button class="reject-btn" onclick="updateStatus(${volunteer.id}, 'rejected')">Reject</button>
+          ` : ''}
+          <button class="delete-btn" onclick="deleteVolunteerRequest(${volunteer.id})">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+  
+  html += `
+      </tbody>
+    </table>
+  `;
+  
+  volunteersContainer.innerHTML = html;
+}
+
+// View volunteer details
+async function viewVolunteerDetails(id) {
+  const volunteerDetails = document.getElementById('volunteerDetails');
+  volunteerDetails.innerHTML = '<div class="loading">Loading details...</div>';
+  
+  const modal = document.getElementById('volunteerModal');
+  modal.style.display = 'block';
+  
+  try {
+    // This endpoint needs to be implemented in your backend
+    const response = await fetch(`http://localhost:3000/api/volunteer-requests/${id}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      const volunteer = result.data;
+      const startDate = new Date(volunteer.startDate).toLocaleDateString();
+      const endDate = new Date(volunteer.endDate).toLocaleDateString();
+      
+      let html = `
+        <div class="volunteer-details">
+          <div class="pet-info">
+            <h3 class="detail-title">Pet Information</h3>
+            <img src="http://localhost:3000${volunteer.petPhotoUrl}" alt="${volunteer.petName}" class="pet-image">
+            
+            <div class="detail-item">
+              <span class="detail-label">Pet Name</span>
+              <span class="detail-value">${volunteer.petName}</span>
+            </div>
+            
+            <div class="detail-item">
+              <span class="detail-label">Pet Type</span>
+              <span class="detail-value">${volunteer.petType}</span>
+            </div>
+            
+            <div class="detail-item">
+              <span class="detail-label">Breed</span>
+              <span class="detail-value">${volunteer.petBreed}</span>
+            </div>
+            
+            <div class="detail-item">
+              <span class="detail-label">Age</span>
+              <span class="detail-value">${volunteer.petAge} months</span>
+            </div>
+            
+            <div class="detail-item">
+              <span class="detail-label">Certificate</span>
+              <a href="http://localhost:3000${volunteer.petCertUrl}" target="_blank" class="cert-link">View Certificate</a>
+            </div>
+          </div>
+          
+          <div class="owner-info">
+            <h3 class="detail-title">Owner Information</h3>
+            
+            <div class="detail-item">
+              <span class="detail-label">Name</span>
+              <span class="detail-value">${volunteer.ownerName}</span>
+            </div>
+            
+            <div class="detail-item">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">${volunteer.email}</span>
+            </div>
+            
+            <div class="detail-item">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value">${volunteer.phone}</span>
+            </div>
+            
+            <div class="detail-item">
+              <span class="detail-label">Volunteering Period</span>
+              <span class="detail-value">${startDate} to ${endDate}</span>
+            </div>
+            
+            <div class="detail-item">
+              <span class="detail-label">Status</span>
+              <span class="status ${volunteer.status}">${volunteer.status}</span>
+            </div>
+          </div>
+          
+          <div class="instructions">
+            <h3 class="detail-title">Special Care Instructions</h3>
+            <p>${volunteer.instructions || 'No special instructions provided.'}</p>
+          </div>
+        </div>
+        
+        <div class="modal-actions">
+          ${volunteer.status === 'pending' ? `
+            <button class="approve-btn" onclick="updateStatus(${volunteer.id}, 'approved')">Approve Request</button>
+            <button class="reject-btn" onclick="updateStatus(${volunteer.id}, 'rejected')">Reject Request</button>
+          ` : ''}
+          <button class="delete-btn" onclick="deleteVolunteerRequest(${volunteer.id})">Delete Request</button>
+        </div>
+      `;
+      
+      volunteerDetails.innerHTML = html;
+    } else {
+      volunteerDetails.innerHTML = `<div class="error">Error loading details: ${result.message}</div>`;
+    }
+  } catch (error) {
+    console.error('Error fetching volunteer details:', error);
+    volunteerDetails.innerHTML = '<div class="error">Failed to load details. Please try again.</div>';
+  }
+}
+
+// Update volunteer request status
+async function updateStatus(id, status) {
+  try {
+    const response = await fetch(`http://localhost:3000/api/volunteer-requests/${id}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ status })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      alert(`Volunteer request ${status} successfully!`);
+      closeModal();
+      fetchVolunteerRequests(); // Refresh the list
+    } else {
+      alert(`Error updating status: ${result.message}`);
+    }
+  } catch (error) {
+    console.error('Error updating volunteer status:', error);
+    alert('Failed to update status. Please try again.');
+  }
+}
+
+// Delete volunteer request
+async function deleteVolunteerRequest(id) {
+  if (!confirm('Are you sure you want to delete this volunteer request? This action cannot be undone.')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`http://localhost:3000/api/volunteer-requests/${id}`, {
+      method: 'DELETE'
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      alert('Volunteer request deleted successfully!');
+      closeModal();
+      fetchVolunteerRequests(); // Refresh the list
+    } else {
+      alert(`Error deleting request: ${result.message}`);
+    }
+  } catch (error) {
+    console.error('Error deleting volunteer request:', error);
+    alert('Failed to delete request. Please try again.');
+  }
+}
+
+// Close the modal
+function closeModal() {
+  const modal = document.getElementById('volunteerModal');
+  modal.style.display = 'none';
+}
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+  const modal = document.getElementById('volunteerModal');
+  if (event.target === modal) {
+    modal.style.display = 'none';
+  }
+};
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pet Adoption Request</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: rgb(197, 182, 185);
+    }
+
+    .hero {
+      background: url('https://images.unsplash.com/photo-1613239295343-de8de91e1ae3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 800px;
+      background-color: white;
+      margin: -80px auto 30px;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      font-weight: 500;
+      margin-top: 15px;
+      display: block;
+      color: #555;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      font-size: 14px;
+    }
+
+    input[type="file"] {
+      background-color: transparent;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .submit-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .home-btn {
+      background-color: grey;
+      color: white;
+    }
+
+    .success-msg {
+      text-align: center;
+      color: green;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        font-size: 24px;
+        height: 200px;
+      }
+      .container {
+        margin: -60px 15px 30px;
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    Pet Adoption Request
+  </div>
+
+  <div class="container">
+
+    <!-- Centered Home Button -->
+    <div class="btn-container">
+      <button class="home-btn" onclick="goHome()">🏠 Home</button>
+    </div>
+
+    <form id="adoptionForm">
+      <div class="form-title">Fill the details to place your pet for adoption</div>
+
+      <label for="petType">Pet Type</label>
+      <select name="petType" required>
+        <option value="">--Select Pet Type--</option>
+        <option value="Dog">Dog</option>
+        <option value="Cat">Cat</option>
+        <option value="Rabbit">Rabbit</option>
+        <option value="Bird">Bird</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="petName">Pet Name</label>
+      <input type="text" name="petName" required>
+
+      <label for="petBreed">Pet Breed</label>
+      <input type="text" name="petBreed" required>
+
+      <label for="petAge">Pet Age(months)</label>
+      <input type="number" name="petAge" required>
+
+      <label for="price">Adoption Price (₹)</label>
+      <input type="number" name="price" required>
+
+      <label for="ownerName">Your Name</label>
+      <input type="text" name="ownerName" required>
+
+      <label for="email">Email</label>
+      <input type="email" name="email" required>
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" name="phone" required>
+
+      <label for="reason">Details About Pet</label>
+      <textarea name="reason" rows="3" required></textarea>
+
+      <label for="petPhoto">Pet Photo</label>
+      <input type="file" name="petPhoto" accept="image/*" required>
+
+      <label for="petCert">Pet Certificates (PDF/Image)</label>
+      <input type="file" name="petCert" accept=".pdf,image/*" required>
+
+      <div class="btn-container">
+        <button type="submit" class="submit-btn">Submit Request</button>
+      </div>
+    </form>
+
+    <div class="success-msg" id="successMsg"></div>
+  </div>
+
+  <script>
+    function goHome() {
+      window.location.href = "../user/index.html"; // Adjust path as needed
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+  const adoptionForm = document.getElementById('adoptionForm');
+  const successMsg = document.getElementById('successMsg');
+
+  adoptionForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(adoptionForm);
+    
+    try {
+      const response = await fetch('http://localhost:3000/api/adoptions', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        successMsg.textContent = 'Your adoption request has been submitted successfully!';
+        adoptionForm.reset();
+        
+        // Redirect to home page after 3 seconds
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 3000);
+      } else {
+        successMsg.textContent = 'Error: ' + result.error;
+        successMsg.style.color = 'red';
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      successMsg.textContent = 'An error occurred. Please try again.';
+      successMsg.style.color = 'red';
+    }
+  });
+  
+  // Function to go back to home page
+  window.goHome = function() {
+    window.location.href = 'index.html';
+  };
+});
+
+</script>
+</body>
+</html>
