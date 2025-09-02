@@ -1,16 +1,15 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./models/db'); // Import the Sequelize instance
-const authRoutes = require('./routes/authRoutes'); // Import authentication routes
-const doctorRoutes = require('./routes/doctorRoutes'); // Import doctor routes
-const User = require('./models/userModel'); // Import the User model
-const Doctor = require('./models/doctorModel'); // Import the Doctor model
-// filepath: c:\Users\annem\OneDrive\Desktop\Minor Project\pets-adoption-website\backend\server.js
-const petFoodRoutes = require('./routes/petFoodRoutes'); 
-const reviewRoutes = require('./routes/reviewRoutes'); // Import review routes
-const adoptionRoutes = require('./routes/adoptionRoutes'); // Import adoption routes
-const volunteerRoutes = require('./routes/volunteerRoutes'); // Import volunteer routes
+const path = require('path'); // ✅ For serving frontend files
+const db = require('./models/db'); // Import Sequelize instance
 
+// Import routes
+const authRoutes = require('./routes/authRoutes'); 
+const doctorRoutes = require('./routes/doctorRoutes'); 
+const petFoodRoutes = require('./routes/petFoodRoutes'); 
+const reviewRoutes = require('./routes/reviewRoutes'); 
+const adoptionRoutes = require('./routes/adoptionRoutes'); 
+const volunteerRoutes = require('./routes/volunteerRoutes'); 
 
 const app = express();
 
@@ -18,24 +17,32 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the uploads directory
-app.use('/uploads', express.static('uploads'));
+// ✅ Serve the frontend folder (outside backend)
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-// Routes
-app.use('/api/auth', authRoutes); // Authentication routes
-app.use('/api/doctors', doctorRoutes); // Doctor management routes
-app.use('/api/petfood', petFoodRoutes); // Pet food management routes
-app.use('/api/reviews', reviewRoutes); // Review routes
-app.use('/api/adoptions', adoptionRoutes); // Adoption routes
-app.use('/api/volunteer-requests', volunteerRoutes); // Volunteer routes
+// ✅ Default route → signup page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'user', 'signup.html'));
+});
 
-// Sync the models with the database
-db.sync({ alter: true }) // Use alter: true to update the table structure if needed
-    .then(() => console.log('Database synced successfully'))
-    .catch((err) => console.error('Error syncing the database:', err));
+// Serve uploads (images etc.)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Start the server
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/doctors', doctorRoutes);
+app.use('/api/petfood', petFoodRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/adoptions', adoptionRoutes);
+app.use('/api/volunteer-requests', volunteerRoutes);
+
+// Sync DB
+db.sync({ alter: true })
+  .then(() => console.log('Database synced successfully'))
+  .catch((err) => console.error('Error syncing the database:', err));
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
