@@ -44,13 +44,18 @@ The system ensures **secure login/signup authentication** for users, while provi
 - Recommended pet foods listed with **images, details, and suitable pets**.  
 - Admin can add pet food recommendations → displayed to users in real-time.  
 
+### 📝 Pet Reviews  
+- Users can **write reviews** sharing their experiences, tips, and stories.  
+- Reviews are displayed on the **Resources** page for other pet lovers.  
+- Admin can **delete inappropriate or outdated reviews**.  
+
 ### 🛠 Manage Pets (Admin Panel)  
 Admin-exclusive access with 5 main sections:  
 1. **Adoption** → View & manage adoption requests (Accept / Dismiss).  
 2. **Volunteer** → Manage volunteering requests (Accept / Dismiss).  
 3. **Veterinary** → Add/update veterinary doctors.  
 4. **Pet Food** → Add/update recommended pet foods.  
-5. **Resources** → Manage user reviews (Delete if needed).  
+
 
 ### 📚 Resources  
 - Users can **read reviews, tips, and pet-care stories** from others.  
@@ -75,4 +80,20 @@ Admin-exclusive access with 5 main sections:
    git clone https://github.com/navyasreeannem/pets-adoption.git
    cd pets-adoption/pets-adoption-website
 2.Install dependencies
+   ```bash
 npm install
+3.Create a .env file in the root directory and add:
+```bash
+PORT=3000
+DATABASE_URL=your_postgres_connection_string
+4.Run the application locally
+```bash
+npm start
+5.Visit in browser:
+```bash
+http://localhost:3000
+
+
+
+
+
