@@ -82,16 +82,20 @@ Admin-exclusive access with 5 main sections:
 2.Install dependencies
    ```bash
 npm install
+```
 3.Create a .env file in the root directory and add:
 ```bash
 PORT=3000
 DATABASE_URL=your_postgres_connection_string
+```
 4.Run the application locally
 ```bash
 npm start
+```
 5.Visit in browser:
 ```bash
 http://localhost:3000
+```
 
 
 
