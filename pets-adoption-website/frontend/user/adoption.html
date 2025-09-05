@@ -349,7 +349,8 @@ const API_BASE_URL =
     pets.forEach(pet => {
       html += `
         <div class="pet-card" onclick="window.location.href='pet-detail.html?id=${pet.id}'">
-          <img src="${API_BASE_URL}${pet.petPhotoUrl}" alt="${pet.petName}" class="pet-image">
+          <img src="${API_BASE_URL}/${pet.petPhotoUrl.replace(/^\/+/, '')}" alt="${pet.petName}" class="pet-image">
+
 
           <div class="pet-info">
             <h3 class="pet-name">${pet.petName}</h3>

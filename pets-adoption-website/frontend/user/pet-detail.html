@@ -275,7 +275,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const html = `
       <div class="pet-detail-card">
         <div class="pet-header">
-          <img src="${API_BASE_URL}${pet.petPhotoUrl}" alt="${pet.petName}" class="pet-image">
+         <img src="${API_BASE_URL}/${pet.petPhotoUrl.replace(/^\/+/, '')}" alt="${pet.petName}" class="pet-image">
+
           <div class="pet-title">
             <h1 class="pet-name">${pet.petName}</h1>
             <p class="pet-breed">${pet.petBreed}</p>
@@ -312,7 +313,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="pet-documents">
               <h2>Pet Documents</h2>
               <p>You can view the pet's certificate by clicking the button below:</p>
-              <a href="${API_BASE_URL}${pet.petCertUrl}" target="_blank" class="document-btn">View Pet Certificate</a>
+              <a href="${API_BASE_URL}/${pet.petCertUrl.replace(/^\/+/, '')}" target="_blank" class="document-btn">View Pet Certificate</a>
+
             </div>
           </div>
           
