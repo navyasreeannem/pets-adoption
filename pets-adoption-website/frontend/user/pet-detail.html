@@ -230,9 +230,12 @@
   </div>
   
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
   const petDetailContainer = document.getElementById('petDetailContainer');
   
+  // API Base URL for Render
+  const API_BASE_URL = 'https://pets-adoption-b8d9.onrender.com';
+
   // Get pet ID from URL
   const urlParams = new URLSearchParams(window.location.search);
   const petId = urlParams.get('id');
@@ -245,7 +248,7 @@
   // Fetch pet details
   async function fetchPetDetails() {
     try {
-      const response = await fetch(`http://localhost:3000/api/adoptions/${petId}`);
+      const response = await fetch(`${API_BASE_URL}/api/adoptions/${petId}`);
       const result = await response.json();
       
       if (result.success) {
@@ -272,7 +275,7 @@
     const html = `
       <div class="pet-detail-card">
         <div class="pet-header">
-          <img src="http://localhost:3000${pet.petPhotoUrl}" alt="${pet.petName}" class="pet-image">
+          <img src="${API_BASE_URL}${pet.petPhotoUrl}" alt="${pet.petName}" class="pet-image">
           <div class="pet-title">
             <h1 class="pet-name">${pet.petName}</h1>
             <p class="pet-breed">${pet.petBreed}</p>
@@ -309,7 +312,7 @@
             <div class="pet-documents">
               <h2>Pet Documents</h2>
               <p>You can view the pet's certificate by clicking the button below:</p>
-              <a href="http://localhost:3000${pet.petCertUrl}" target="_blank" class="document-btn">View Pet Certificate</a>
+              <a href="${API_BASE_URL}${pet.petCertUrl}" target="_blank" class="document-btn">View Pet Certificate</a>
             </div>
           </div>
           
@@ -379,7 +382,7 @@
     }
   };
 });
+</script>
 
-  </script>
 </body>
 </html>

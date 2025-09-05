@@ -229,6 +229,8 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const requestsContainer = document.getElementById('requestsContainer');
+      const API_BASE_URL = 'https://pets-adoption-b8d9.onrender.com'; // CHANGED FOR RENDER
+
       
       // Get user email from localStorage (assuming user is logged in)
       const userEmail = localStorage.getItem('userEmail');
@@ -249,7 +251,8 @@
           // Show loading message
           requestsContainer.innerHTML = '<div class="loading">Loading your volunteer requests...</div>';
           
-          const response = await fetch(`http://localhost:3000/api/volunteer-requests/user/${encodeURIComponent(userEmail)}`);
+          const response = await fetch(`${API_BASE_URL}/api/volunteer-requests/user/${encodeURIComponent(userEmail)}`);
+
           
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -290,8 +293,9 @@
           
           // Get photo URL
           const photoUrl = request.petPhotoUrl ?
-            (request.petPhotoUrl.startsWith('/') ? `http://localhost:3000${request.petPhotoUrl}` : `http://localhost:3000/${request.petPhotoUrl}`) :
-            'placeholder.jpg';
+  (request.petPhotoUrl.startsWith('/') ? `${API_BASE_URL}${request.petPhotoUrl}` : `${API_BASE_URL}/${request.petPhotoUrl}`) :
+  'placeholder.jpg';
+
           
           html += `
             <div class="request-card">
@@ -361,9 +365,10 @@
         }
         
         try {
-            const response = await fetch(`http://localhost:3000/api/volunteer-requests/${id}`, {
-            method: 'DELETE'
-          });
+            const response = await fetch(`${API_BASE_URL}/api/volunteer-requests/${id}`, {
+  method: 'DELETE'
+});
+
           
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);

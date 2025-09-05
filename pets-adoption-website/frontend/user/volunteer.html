@@ -558,6 +558,9 @@
       
       // Store all pets for filtering
       let allPets = [];
+      // Base URL for API (use Render URL instead of localhost)
+const API_BASE_URL = 'https://pets-adoption-b8d9.onrender.com';
+
       
       // Fetch all approved volunteer requests
       async function fetchApprovedPets() {
@@ -565,7 +568,8 @@
           // Show loading spinner
           petsContainer.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
           
-          const response = await fetch('http://localhost:3000/api/volunteer-requests/approved');
+          const response = await fetch(`${API_BASE_URL}/api/volunteer-requests/approved`);
+
           
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -599,8 +603,9 @@
             }
             
             const photoUrl = pet.petPhotoUrl.startsWith('/')
-              ? `http://localhost:3000${pet.petPhotoUrl}`
-              : `http://localhost:3000/${pet.petPhotoUrl}`;
+  ? `${API_BASE_URL}${pet.petPhotoUrl}`
+  : `${API_BASE_URL}/${pet.petPhotoUrl}`;
+
             
             const img = new Image();
             img.onload = () => resolve();
@@ -638,8 +643,9 @@
           
           // Make sure petPhotoUrl has a valid format
           const photoUrl = pet.petPhotoUrl ?
-            (pet.petPhotoUrl.startsWith('/') ? `http://localhost:3000${pet.petPhotoUrl}` : `http://localhost:3000/${pet.petPhotoUrl}`) :
-            'placeholder.jpg';
+  (pet.petPhotoUrl.startsWith('/') ? `${API_BASE_URL}${pet.petPhotoUrl}` : `${API_BASE_URL}/${pet.petPhotoUrl}`) :
+  'placeholder.jpg';
+
           
           html += `
             <div class="pet-card">
@@ -757,8 +763,9 @@
         
         // Set pet image
         const photoUrl = pet.petPhotoUrl ?
-          (pet.petPhotoUrl.startsWith('/') ? `http://localhost:3000${pet.petPhotoUrl}` : `http://localhost:3000/${pet.petPhotoUrl}`) :
-          'placeholder.jpg';
+  (pet.petPhotoUrl.startsWith('/') ? `${API_BASE_URL}${pet.petPhotoUrl}` : `${API_BASE_URL}/${pet.petPhotoUrl}`) :
+  'placeholder.jpg';
+
         document.getElementById('modalPetImage').src = photoUrl;
         document.getElementById('modalPetImage').alt = pet.petName || 'Pet Image';
         
@@ -900,6 +907,6 @@
 
 
       
-      //
+ 
 
 

@@ -294,17 +294,22 @@
     </div>
   </div>
   
+  
+
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
   fetchVolunteerRequests();
 });
+
+// API Base URL for Render
+const API_BASE_URL = 'https://pets-adoption-b8d9.onrender.com';
 
 // Fetch all volunteer requests
 async function fetchVolunteerRequests() {
   const volunteersContainer = document.getElementById('volunteersContainer');
   
   try {
-    const response = await fetch('http://localhost:3000/api/volunteer-requests');
+    const response = await fetch(`${API_BASE_URL}/api/volunteer-requests`);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -389,8 +394,7 @@ async function viewVolunteerDetails(id) {
   modal.style.display = 'block';
   
   try {
-    // This endpoint needs to be implemented in your backend
-    const response = await fetch(`http://localhost:3000/api/volunteer-requests/${id}`);
+    const response = await fetch(`${API_BASE_URL}/api/volunteer-requests/${id}`);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -407,7 +411,7 @@ async function viewVolunteerDetails(id) {
         <div class="volunteer-details">
           <div class="pet-info">
             <h3 class="detail-title">Pet Information</h3>
-            <img src="http://localhost:3000${volunteer.petPhotoUrl}" alt="${volunteer.petName}" class="pet-image">
+            <img src="${API_BASE_URL}${volunteer.petPhotoUrl}" alt="${volunteer.petName}" class="pet-image">
             
             <div class="detail-item">
               <span class="detail-label">Pet Name</span>
@@ -431,7 +435,7 @@ async function viewVolunteerDetails(id) {
             
             <div class="detail-item">
               <span class="detail-label">Certificate</span>
-              <a href="http://localhost:3000${volunteer.petCertUrl}" target="_blank" class="cert-link">View Certificate</a>
+              <a href="${API_BASE_URL}${volunteer.petCertUrl}" target="_blank" class="cert-link">View Certificate</a>
             </div>
           </div>
           
@@ -492,7 +496,7 @@ async function viewVolunteerDetails(id) {
 // Update volunteer request status
 async function updateStatus(id, status) {
   try {
-    const response = await fetch(`http://localhost:3000/api/volunteer-requests/${id}/status`, {
+    const response = await fetch(`${API_BASE_URL}/api/volunteer-requests/${id}/status`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -509,7 +513,7 @@ async function updateStatus(id, status) {
     if (result.success) {
       alert(`Volunteer request ${status} successfully!`);
       closeModal();
-      fetchVolunteerRequests(); // Refresh the list
+      fetchVolunteerRequests();
     } else {
       alert(`Error updating status: ${result.message}`);
     }
@@ -526,7 +530,7 @@ async function deleteVolunteerRequest(id) {
   }
   
   try {
-    const response = await fetch(`http://localhost:3000/api/volunteer-requests/${id}`, {
+    const response = await fetch(`${API_BASE_URL}/api/volunteer-requests/${id}`, {
       method: 'DELETE'
     });
     
@@ -539,7 +543,7 @@ async function deleteVolunteerRequest(id) {
     if (result.success) {
       alert('Volunteer request deleted successfully!');
       closeModal();
-      fetchVolunteerRequests(); // Refresh the list
+      fetchVolunteerRequests();
     } else {
       alert(`Error deleting request: ${result.message}`);
     }
@@ -562,7 +566,7 @@ window.onclick = function(event) {
     modal.style.display = 'none';
   }
 };
+</script>
 
-  </script>
 </body>
 </html>

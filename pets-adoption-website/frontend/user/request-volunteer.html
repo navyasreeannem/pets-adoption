@@ -180,6 +180,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const loadingMsg = document.getElementById('loadingMsg');
   const successMsg = document.getElementById('successMsg');
   const errorMsg = document.getElementById('errorMsg');
+  const API_BASE_URL = 'https://pets-adoption-b8d9.onrender.com'; // CHANGED FOR RENDER
+
 
   volunteerForm.addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -207,10 +209,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(pair[0] + ': ' + pair[1]);
       }
       
-      const response = await fetch('http://localhost:3000/api/volunteer-requests/add', {
-        method: 'POST',
-        body: formData
-      });
+      const response = await fetch(`${API_BASE_URL}/api/volunteer-requests/add`, { // CHANGED FOR RENDER
+  method: 'POST',
+  body: formData
+});
+
       
       console.log('Response received:', response.status); // Debug log
       
