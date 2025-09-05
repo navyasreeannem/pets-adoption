@@ -602,9 +602,12 @@ const API_BASE_URL = 'https://pets-adoption-b8d9.onrender.com';
               return;
             }
             
-            const photoUrl = pet.petPhotoUrl.startsWith('/')
-  ? `${API_BASE_URL}${pet.petPhotoUrl}`
-  : `${API_BASE_URL}/${pet.petPhotoUrl}`;
+            const photoUrl = pet.petPhotoUrl
+  ? pet.petPhotoUrl.startsWith('http')
+    ? pet.petPhotoUrl
+    : `${API_BASE_URL}/${pet.petPhotoUrl.replace(/^\/+/, '')}`
+  : 'https://via.placeholder.com/300x200?text=No+Image';
+
 
             
             const img = new Image();
@@ -642,9 +645,12 @@ const API_BASE_URL = 'https://pets-adoption-b8d9.onrender.com';
           const petAge = isNaN(pet.petAge) ? 0 : pet.petAge;
           
           // Make sure petPhotoUrl has a valid format
-          const photoUrl = pet.petPhotoUrl ?
-  (pet.petPhotoUrl.startsWith('/') ? `${API_BASE_URL}${pet.petPhotoUrl}` : `${API_BASE_URL}/${pet.petPhotoUrl}`) :
-  'placeholder.jpg';
+          const photoUrl = pet.petPhotoUrl
+  ? pet.petPhotoUrl.startsWith('http')
+    ? pet.petPhotoUrl
+    : `${API_BASE_URL}/${pet.petPhotoUrl.replace(/^\/+/, '')}`
+  : 'https://via.placeholder.com/300x200?text=No+Image';
+
 
           
           html += `
@@ -762,9 +768,12 @@ const API_BASE_URL = 'https://pets-adoption-b8d9.onrender.com';
         document.getElementById('modalPetName').textContent = pet.petName || 'Unnamed Pet';
         
         // Set pet image
-        const photoUrl = pet.petPhotoUrl ?
-  (pet.petPhotoUrl.startsWith('/') ? `${API_BASE_URL}${pet.petPhotoUrl}` : `${API_BASE_URL}/${pet.petPhotoUrl}`) :
-  'placeholder.jpg';
+        const photoUrl = pet.petPhotoUrl
+  ? pet.petPhotoUrl.startsWith('http')
+    ? pet.petPhotoUrl
+    : `${API_BASE_URL}/${pet.petPhotoUrl.replace(/^\/+/, '')}`
+  : 'https://via.placeholder.com/300x200?text=No+Image';
+
 
         document.getElementById('modalPetImage').src = photoUrl;
         document.getElementById('modalPetImage').alt = pet.petName || 'Pet Image';
