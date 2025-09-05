@@ -139,14 +139,14 @@
     </div>
   </div>
   
-  <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
   const adoptionsContainer = document.getElementById('adoptionsContainer');
   
   // Fetch all adoption requests
   async function fetchAdoptionRequests() {
     try {
-      const response = await fetch('http://localhost:3000/api/adoptions');
+      const response = await fetch('https://pets-adoption-b8d9.onrender.com/api/adoptions');
       const result = await response.json();
       
       if (result.success) {
@@ -218,7 +218,7 @@
   // Function to update adoption status
   window.updateStatus = async function(id, status) {
     try {
-      const response = await fetch(`http://localhost:3000/api/adoptions/${id}`, {
+      const response = await fetch(`https://pets-adoption-b8d9.onrender.com/api/adoptions/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -247,7 +247,7 @@
     }
     
     try {
-      const response = await fetch(`http://localhost:3000/api/adoptions/${id}`, {
+      const response = await fetch(`https://pets-adoption-b8d9.onrender.com/api/adoptions/${id}`, {
         method: 'DELETE'
       });
       
@@ -268,7 +268,7 @@
   // Initial fetch of adoption requests
   fetchAdoptionRequests();
 });
+</script>
 
-  </script>
 </body>
 </html>
