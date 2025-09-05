@@ -172,54 +172,60 @@
     <div class="success-msg" id="successMsg"></div>
   </div>
 
-  <script>
-    function goHome() {
-      window.location.href = "../user/index.html"; // Adjust path as needed
-    }
+<script>
+  function goHome() {
+    window.location.href = "../user/index.html"; // Adjust path as needed
+  }
 
-    
-    document.addEventListener('DOMContentLoaded', function() {
-  const adoptionForm = document.getElementById('adoptionForm');
-  const successMsg = document.getElementById('successMsg');
+  document.addEventListener('DOMContentLoaded', function() {
+    const adoptionForm = document.getElementById('adoptionForm');
+    const successMsg = document.getElementById('successMsg');
 
-  adoptionForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(adoptionForm);
-    
-    try {
-      const response = await fetch('http://localhost:3000/api/adoptions', {
-        method: 'POST',
-        body: formData
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        successMsg.textContent = 'Your adoption request has been submitted successfully!';
-        adoptionForm.reset();
-        
-        // Redirect to home page after 3 seconds
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 3000);
-      } else {
-        successMsg.textContent = 'Error: ' + result.error;
+    // ✅ Base URL for API depending on environment
+    const API_BASE_URL =
+      window.location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "https://pets-adoption-b8d9.onrender.com";
+
+    adoptionForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(adoptionForm);
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/adoptions`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          successMsg.textContent = 'Your adoption request has been submitted successfully!';
+          successMsg.style.color = 'green';
+          adoptionForm.reset();
+
+          // Redirect to home page after 3 seconds
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 3000);
+        } else {
+          successMsg.textContent = 'Error: ' + result.error;
+          successMsg.style.color = 'red';
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        successMsg.textContent = 'An error occurred. Please try again.';
         successMsg.style.color = 'red';
       }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      successMsg.textContent = 'An error occurred. Please try again.';
-      successMsg.style.color = 'red';
-    }
-  });
-  
-  // Function to go back to home page
-  window.goHome = function() {
-    window.location.href = 'index.html';
-  };
-});
+    });
 
+    // Function to go back to home page
+    window.goHome = function() {
+      window.location.href = 'index.html';
+    };
+  });
 </script>
+
 </body>
 </html>

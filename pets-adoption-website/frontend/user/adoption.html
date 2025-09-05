@@ -301,11 +301,18 @@
   
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      
   const petsContainer = document.getElementById('petsContainer');
   const petTypeSelect = document.getElementById('petType');
   const petBreedSelect = document.getElementById('petBreed');
   const ageRangeSelect = document.getElementById('ageRange');
   const priceRangeSelect = document.getElementById('priceRange');
+  // Detect whether running locally or deployed
+const API_BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3000"
+    : "https://pets-adoption-b8d9.onrender.com";
+
   
   // Store all pets for filtering
   let allPets = [];
@@ -313,7 +320,8 @@
   // Fetch all approved pets
   async function fetchApprovedPets() {
     try {
-      const response = await fetch('http://localhost:3000/api/adoptions/approved');
+      const response = await fetch(`${API_BASE_URL}/api/adoptions/approved`);
+
       const result = await response.json();
       
       if (result.success) {
@@ -341,7 +349,8 @@
     pets.forEach(pet => {
       html += `
         <div class="pet-card" onclick="window.location.href='pet-detail.html?id=${pet.id}'">
-          <img src="http://localhost:3000${pet.petPhotoUrl}" alt="${pet.petName}" class="pet-image">
+          <img src="${API_BASE_URL}${pet.petPhotoUrl}" alt="${pet.petName}" class="pet-image">
+
           <div class="pet-info">
             <h3 class="pet-name">${pet.petName}</h3>
             <p class="pet-breed">${pet.petBreed}</p>
