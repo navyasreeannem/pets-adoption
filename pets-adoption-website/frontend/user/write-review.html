@@ -283,39 +283,41 @@
   </main>
   
 <script>
-    function navigateToHome() {
-      window.location.href = 'index.html';
-    }
-    document.getElementById('review-form').addEventListener('submit', async function (e) {
-  e.preventDefault();
-
-  const data = {
-    userName: document.getElementById('userName').value,
-    userEmail: document.getElementById('userEmail').value,
-    petName: document.getElementById('petName').value,
-    petType: document.getElementById('petType').value,
-    reviewTitle: document.getElementById('reviewTitle').value,
-    content: document.getElementById('content').value,
-  };
-
-  try {
-    const response = await fetch('http://localhost:3000/api/reviews/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-      alert('Review submitted successfully!');
-      document.getElementById('review-form').reset();
-    } else {
-      alert('Failed to submit review');
-    }
-  } catch (err) {
-    console.error(err);
-    alert('Error occurred while submitting the review');
+  function navigateToHome() {
+    window.location.href = 'index.html';
   }
-});
-  </script>
+
+  document.getElementById('review-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const data = {
+      userName: document.getElementById('userName').value,
+      userEmail: document.getElementById('userEmail').value,
+      petName: document.getElementById('petName').value,
+      petType: document.getElementById('petType').value,
+      reviewTitle: document.getElementById('reviewTitle').value,
+      content: document.getElementById('content').value,
+    };
+
+    try {
+      // ✅ Changed to relative path (works in local & deployment)
+      const response = await fetch('/api/reviews/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert('✅ Review submitted successfully!');
+        document.getElementById('review-form').reset();
+      } else {
+        alert('❌ Failed to submit review');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('⚠️ Error occurred while submitting the review');
+    }
+  });
+</script>
 </body>
 </html>

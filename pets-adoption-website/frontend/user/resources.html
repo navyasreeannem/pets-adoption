@@ -113,46 +113,51 @@
   <button onclick="window.location.href='write-review.html'">Write a Review</button>
 
   <script>
-    // Generate a random color
-    function getRandomColor() {
-      const letters = '0123456789ABCDEF';
-      let color = '#';
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
+  // Generate a random color
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
     }
+    return color;
+  }
 
-    // Fetch and Display Reviews
-    async function fetchReviews() {
-      try {
-        const response = await fetch('http://localhost:3000/api/reviews/');
-        const reviews = await response.json();
+  // Fetch and Display Reviews
+  async function fetchReviews() {
+    try {
+      // Use relative path instead of hardcoded localhost
+      const response = await fetch('/api/reviews');
+      const reviews = await response.json();
 
-        const reviewList = document.getElementById('reviewList');
-        reviewList.innerHTML = ''; // Clear existing reviews
+      const reviewList = document.getElementById('reviewList');
+      reviewList.innerHTML = ''; // Clear existing reviews
 
-        reviews.forEach((review, index) => {
-          const reviewDiv = document.createElement('div');
-          reviewDiv.className = 'review-item';
-          reviewDiv.innerHTML = `
-            <div class="review-avatar" style="background-color: ${getRandomColor()};"></div>
-            <div class="review-content">
-              <h3>${review.reviewTitle}</h3>
-              <p><strong>By:</strong> ${review.userName}</p>
-              <p><strong>Pet:</strong> ${review.petName} (${review.petType})</p>
-              <p>${review.content}</p>
-            </div>
-          `;
-          reviewList.appendChild(reviewDiv);
-        });
-      } catch (err) {
-        console.error('Failed to fetch reviews:', err);
-      }
+      reviews.forEach((review) => {
+        const reviewDiv = document.createElement('div');
+        reviewDiv.className = 'review-item';
+        reviewDiv.innerHTML = `
+          <div class="review-avatar" style="background-color: ${getRandomColor()};"></div>
+          <div class="review-content">
+            <h3>${review.reviewTitle}</h3>
+            <p><strong>By:</strong> ${review.userName}</p>
+            <p><strong>Pet:</strong> ${review.petName} (${review.petType})</p>
+            <p>${review.content}</p>
+          </div>
+        `;
+        reviewList.appendChild(reviewDiv);
+      });
+    } catch (err) {
+      console.error('Failed to fetch reviews:', err);
+      const reviewList = document.getElementById('reviewList');
+      reviewList.innerHTML = '<p style="color:red;">Failed to load reviews. Please try again later.</p>';
     }
+  }
 
-    // Initial Fetch
-    fetchReviews();
-  </script>
+  // Initial Fetch
+  fetchReviews();
+</script>
+
+
 </body>
 </html>
