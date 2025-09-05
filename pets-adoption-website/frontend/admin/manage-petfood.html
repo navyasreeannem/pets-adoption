@@ -98,7 +98,8 @@
       const data = Object.fromEntries(formData.entries());
 
       try {
-        const response = await fetch('http://localhost:3000/api/petfood/add', {
+        // ✅ Changed this line
+        const response = await fetch('/api/petfood/add', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
@@ -115,6 +116,6 @@
         alert('Error occurred');
       }
     });
-  </script>
+</script>
 </body>
 </html>

@@ -101,7 +101,8 @@
       const photo_url = document.getElementById('doctor-photo').value;
 
       try {
-        const response = await fetch(`http://localhost:3000/api/doctors/${id}`, {
+        // ✅ Changed this line
+        const response = await fetch(`/api/doctors/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -119,6 +120,6 @@
         alert('An error occurred while updating the doctor.');
       }
     });
-  </script>
+</script>
 </body>
 </html>

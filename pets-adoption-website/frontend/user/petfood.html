@@ -186,97 +186,98 @@
   </div>
 
   <script>
-    let foodData = [];
-    let cart = [];
+  let foodData = [];
+  let cart = [];
 
-    async function fetchFood() {
-      try {
-        const response = await fetch('http://localhost:3000/api/petfood/');
-        const foodItems = await response.json();
-        foodData = foodItems;
-        displayFood(foodData);
-      } catch (err) {
-        console.error('Error fetching food:', err);
-        document.getElementById('foodList').innerHTML = '<p>Failed to load food data.</p>';
-      }
+  async function fetchFood() {
+    try {
+      // ✅ Changed this line
+      const response = await fetch('/api/petfood/');
+      const foodItems = await response.json();
+      foodData = foodItems;
+      displayFood(foodData);
+    } catch (err) {
+      console.error('Error fetching food:', err);
+      document.getElementById('foodList').innerHTML = '<p>Failed to load food data.</p>';
     }
+  }
 
-    function displayFood(data) {
-      const foodList = document.getElementById('foodList');
-      foodList.innerHTML = '';
+  function displayFood(data) {
+    const foodList = document.getElementById('foodList');
+    foodList.innerHTML = '';
 
-      data.forEach((food, index) => {
-        const div = document.createElement('div');
-        div.className = 'food-item';
+    data.forEach((food, index) => {
+      const div = document.createElement('div');
+      div.className = 'food-item';
 
-        div.innerHTML = `
-          <img src="${food.photo}" alt="${food.recipeName}" onclick="showDetails(${index})" />
-          <h3>${food.recipeName}</h3>
-          <p>$${food.price}</p>
-          <button onclick="addToCart(${index})">Add to Cart</button>
-        `;
+      div.innerHTML = `
+        <img src="${food.photo}" alt="${food.recipeName}" onclick="showDetails(${index})" />
+        <h3>${food.recipeName}</h3>
+        <p>$${food.price}</p>
+        <button onclick="addToCart(${index})">Add to Cart</button>
+      `;
 
-        foodList.appendChild(div);
-      });
-    }
+      foodList.appendChild(div);
+    });
+  }
 
-    function showDetails(index) {
-      const food = foodData[index];
-      document.getElementById('modalTitle').innerText = food.recipeName;
-      document.getElementById('modalBody').innerText = `
+  function showDetails(index) {
+    const food = foodData[index];
+    document.getElementById('modalTitle').innerText = food.recipeName;
+    document.getElementById('modalBody').innerText = `
 Pet Type: ${food.petType}
 Age Range: ${food.ageRange}
 Price: $${food.price}
 
 ${food.description}
-      `;
-      document.getElementById('modal').style.display = 'flex';
-    }
+    `;
+    document.getElementById('modal').style.display = 'flex';
+  }
 
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-    }
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
 
-    function addToCart(index) {
-      cart.push(foodData[index]);
+  function addToCart(index) {
+    cart.push(foodData[index]);
+    updateCartDisplay();
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCartDisplay();
+  }
+
+  function updateCartDisplay() {
+    const cartList = document.getElementById('cartItems');
+    const billSection = document.getElementById('billSection');
+    const totalPriceEl = document.getElementById('totalPrice');
+    billSection.style.display = cart.length ? 'block' : 'none';
+
+    cartList.innerHTML = '';
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `${item.recipeName} - $${item.price}
+        <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>`;
+      cartList.appendChild(li);
+      total += parseFloat(item.price);
+    });
+
+    totalPriceEl.textContent = total.toFixed(2);
+  }
+
+  function showCart() {
+    if (cart.length === 0) {
+      alert("Your cart is empty.");
+    } else {
       updateCartDisplay();
+      window.scrollTo(0, document.getElementById('billSection').offsetTop);
     }
+  }
 
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      updateCartDisplay();
-    }
-
-    function updateCartDisplay() {
-      const cartList = document.getElementById('cartItems');
-      const billSection = document.getElementById('billSection');
-      const totalPriceEl = document.getElementById('totalPrice');
-      billSection.style.display = cart.length ? 'block' : 'none';
-
-      cartList.innerHTML = '';
-      let total = 0;
-
-      cart.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `${item.recipeName} - $${item.price}
-          <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>`;
-        cartList.appendChild(li);
-        total += parseFloat(item.price);
-      });
-
-      totalPriceEl.textContent = total.toFixed(2);
-    }
-
-    function showCart() {
-      if (cart.length === 0) {
-        alert("Your cart is empty.");
-      } else {
-        updateCartDisplay();
-        window.scrollTo(0, document.getElementById('billSection').offsetTop);
-      }
-    }
-
-    fetchFood();
-  </script>
+  fetchFood();
+</script>
 </body>
 </html>

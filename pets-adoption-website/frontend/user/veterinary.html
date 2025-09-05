@@ -61,45 +61,46 @@
     </div>
 
     <script>
-        // JavaScript to fetch and display doctor data
-        async function fetchDoctors() {
-            try {
-                const response = await fetch('http://localhost:3000/api/doctors');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch doctors');
-                }
+  // JavaScript to fetch and display doctor data
+  async function fetchDoctors() {
+    try {
+      // ✅ Changed to relative path (works both locally & on Render)
+      const response = await fetch('/api/doctors');
+      if (!response.ok) {
+        throw new Error('Failed to fetch doctors');
+      }
 
-                const doctors = await response.json();
+      const doctors = await response.json();
 
-                const doctorContainer = document.getElementById('doctor-container');
-                doctorContainer.innerHTML = ''; // Clear existing content
+      const doctorContainer = document.getElementById('doctor-container');
+      doctorContainer.innerHTML = ''; // Clear existing content
 
-                if (doctors.length === 0) {
-                    doctorContainer.innerHTML = '<p>No doctors available at the moment.</p>';
-                    return;
-                }
+      if (doctors.length === 0) {
+        doctorContainer.innerHTML = '<p>No doctors available at the moment.</p>';
+        return;
+      }
 
-                doctors.forEach((doctor) => {
-                    const doctorCard = `
-                        <div class="doctor-card">
-                            <img src="${doctor.photo_url}" alt="${doctor.name}" class="doctor-photo">
-                            <h3>${doctor.name}</h3>
-                            <p><strong>Specialization:</strong> ${doctor.specialization}</p>
-                            <p><strong>Phone:</strong> ${doctor.phone}</p>
-                            <p><strong>Location:</strong> ${doctor.location}</p>
-                        </div>
-                    `;
-                    doctorContainer.innerHTML += doctorCard;
-                });
-            } catch (error) {
-                console.error('Error fetching doctors:', error);
-                const doctorContainer = document.getElementById('doctor-container');
-                doctorContainer.innerHTML = '<p>Failed to load doctor data. Please try again later.</p>';
-            }
-        }
+      doctors.forEach((doctor) => {
+        const doctorCard = `
+          <div class="doctor-card">
+            <img src="${doctor.photo_url}" alt="${doctor.name}" class="doctor-photo">
+            <h3>${doctor.name}</h3>
+            <p><strong>Specialization:</strong> ${doctor.specialization}</p>
+            <p><strong>Phone:</strong> ${doctor.phone}</p>
+            <p><strong>Location:</strong> ${doctor.location}</p>
+          </div>
+        `;
+        doctorContainer.innerHTML += doctorCard;
+      });
+    } catch (error) {
+      console.error('Error fetching doctors:', error);
+      const doctorContainer = document.getElementById('doctor-container');
+      doctorContainer.innerHTML = '<p>Failed to load doctor data. Please try again later.</p>';
+    }
+  }
 
-        // Call the function when the page loads
-        document.addEventListener('DOMContentLoaded', fetchDoctors);
-    </script>
+  // Call the function when the page loads
+  document.addEventListener('DOMContentLoaded', fetchDoctors);
+</script>
 </body>
 </html>
